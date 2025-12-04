@@ -46,3 +46,9 @@ startServer()
 
 
 const { errorHandler, notFound } = require('./middleware/errorHandler');
+
+//Middleware 404 (notFound)
+app.use(notFound);
+
+//Middleware d'erreurs (errorHandler)
+app.use(errorHandler)
