@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const commentSchema = new mongoose.Schema(
     {
@@ -15,12 +15,12 @@ const commentSchema = new mongoose.Schema(
             trim: true,
             maxlength: [100, 'Maximum 100 caractères']
         },
-    articlearticle: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Article',
+    article: {
+            type: mongoose.Schema.Types.ObjectId, // Type: ID MongoDB
+            ref: 'Article', //Référence au modèle Article
             required: [true, 'Article obligatoire']
         },
-    Modérationapprouve: {
+    approuve: {
             type: Boolean,
             default: false
         },
@@ -35,6 +35,8 @@ const commentSchema = new mongoose.Schema(
     }
 );
 
+// INDEX pour optimiser les requêtes
+// MongoDB utilise l'index pour trouver rapidement
 commentSchema.index({ article: 1, createdAt: -1 });
 
 commentSchema.methods.approuver = function() {
@@ -47,6 +49,7 @@ commentSchema.statics.findApprouvesByArticle = function(articleId) {
         .sort({ createdAt: -1 });
 };
 
+//Populate automatique
 commentSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'article',

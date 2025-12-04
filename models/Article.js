@@ -49,7 +49,7 @@ articleSchema.methods.unplublish = function() {
 }
 
 articleSchema.methods.incrementViews = function() {
-    this.vues += 1;
+    this.views += 1;
     return this.save();
 }
 
@@ -64,8 +64,8 @@ articleSchema.statics.findByCategorie = function(categorie) {
 
 //Champs virtuels
 articleSchema.virtual('resume').get(function() {
-    if (this.content.length <= 150) {
-        return this.content;
+    if (this.contenu.length <= 150) {
+        return this.contenu;
     }
     return this.contenu.substring(0, 150) + '...'
 })
