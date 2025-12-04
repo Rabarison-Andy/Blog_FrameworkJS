@@ -1,4 +1,5 @@
 import { Article } from "../models/Article";
+import { QueryFeatures } from "../utils/queryFeatures";
 
 // CREATE
 
@@ -46,13 +47,31 @@ async function createArticle(req, res) {
 
 async function getAllArticles(req, res) {
   try {
-    const articles = await Article.find().sort({ createdAt: -1 });
+	const totalCount = await Article.countDocuments();
 
-    res.status(200).json({
-      success: true,
-      count: articles.length,
-      data: articles,
-    });
+	const features = new QueryFeatures(Article.find(), req.query)
+		.filter()
+		.search()
+		.sort()
+		.limitFields()
+		.paginate();
+
+	const articles = await features.query;
+
+	const paginationInfo = features.getPaginationInfo(totalCount);
+
+	const response = {
+        success: true,
+        count: articles.length,
+        totalCount: totalCount,
+        data: articles
+    };
+
+	if (paginationInfo) {
+		response.pagination = paginationInfo;
+	}
+
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json({
       success: false,
