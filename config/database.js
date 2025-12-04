@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 export async function connectDB() {
     try{
+        //Les options de connexions, ne mettre que celles par défaut pour l'instant
         const options = {}
 
         const conn = mongoose.connect(process.env.MONGODB_URL, options)
@@ -9,7 +10,7 @@ export async function connectDB() {
         console.log('MongoDB connecté : ${conn.connection.host}')
         console.log('MongoDB connecté : ${conn.connection.name}')
 
-        return conn
+        return conn;
 
     } catch {
         console.error('Erreur de connexion à MongoDB : ')
@@ -28,7 +29,22 @@ export async function closeDB() {
     }
 }
 
+// Evenements de connexion Mongoose
+
+//En cas d'erreur après la connexion initiale
+mongoose.connection.on('error', (err) => {
+    console.error('Erreur MongoDB', err);
+});
+
+//En cas de perte de la connexion
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB déco');
+});
+
+//Gestion du Ctrl+C, gestion de l'arrêt de l'appliation depuis le terminal
 process.on('SIGINT', async () => {
     await closeDB();
     process.exit(0);
-})
+});
+
+module.exports = { connectDB, closeDB };

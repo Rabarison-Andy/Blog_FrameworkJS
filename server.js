@@ -1,6 +1,6 @@
+import dotenv from 'dotenv'
 import express from "express";
 import mongoose, { version } from "mongoose";
-import dotenv from 'dotenv'
 import { connectDB } from "./config/database.js";
 import articleRoutes from "./models/articles.js";
 
