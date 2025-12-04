@@ -37,6 +37,7 @@ const articleSchema = new mongoose.Schema(
   }
 ) 
 
+//Méthodes d'instance
 articleSchema.methods.publier = function() {
     this.publish = true;
     return this.save();
@@ -52,10 +53,16 @@ articleSchema.methods.incrementViews = function() {
     return this.save();
 }
 
+//Méthodes statiques
 articleSchema.statics.findPublies = function() {
     return this.find({publie: true}).sort({ createdAt : -1 });
 }
 
+articleSchema.statics.findByCategorie = function(categorie) {
+    return this.find({ categorie, publie: true }).sort({ createdAt: -1 });
+};
+
+//Champs virtuels
 articleSchema.virtual('resume').get(function() {
     if (this.content.length <= 150) {
         return this.content;
@@ -63,11 +70,20 @@ articleSchema.virtual('resume').get(function() {
     return this.contenu.substring(0, 150) + '...'
 })
 
+/*
+articleSchema.virtual('dureeIecture').get(function() {
+    const mots = this.contenu.split(' ').length;
+    const minutes = Math.ceil(mots / 200);
+    return minutes;
+}); */
+
+//Middleware avant opération
 articleSchema.pre('save', function(next) {
     console.log("Sauvegarde de l'article : " + this.titre)
     next()
 })
 
+//Middleware après opération
 articleSchema.post('save', function(doc) {
     console.log(`Article sauvegardé: ${doc._id}`)
 })

@@ -11,6 +11,9 @@ const app = express();
 const PORT = process.env.PORT || 3000
 app.use(express.json());
 
+// Middleware pour parser les données URL-encodées (formulaires)
+app.use(express.urlencoded({ extended: true }));
+
 mongoose.connect("mongodb://mongo:27017/testdb")
   .then(() => console.log("MongoDB connecté"))
   .catch(err => console.error(err));

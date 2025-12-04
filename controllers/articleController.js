@@ -36,7 +36,7 @@ async function createArticle(req, res) {
 
     res.status(500).json({
       success: false,
-      message: "Erreur serveur lors de la création",
+      message: "Erreur serveur lors de la création de l'article",
       error: error.message,
     });
   }
@@ -192,3 +192,11 @@ async function deleteArticle(req, res) {
     }
 
 }
+
+module.exports = {
+    createArticle,
+    getAllArticles,
+    getArticleById,
+    updateArticle,
+    deleteArticle
+};
