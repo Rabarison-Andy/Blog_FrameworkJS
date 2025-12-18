@@ -5,7 +5,7 @@ const router = express.Router({ mergeParams: true });
 const {
     createComment,
     getCommentsByArticle,
-    getApprovedComments
+    getApprovedCommentsByArticle
 } = require('../controllers/commentController');
 
 // /api/articles/:articleId/comments
@@ -14,6 +14,6 @@ router.route('/')
     .post(createComment);
 
 // /api/articles/:articleId/comments/approuves
-router.get('/approuves', getApprovedComments);
+router.get('/approuves', getApprovedCommentsByArticle);
 
 module.exports = router;

@@ -54,3 +54,51 @@ exports.login = catchAsync(async (req, res, next) => {
 
     createSendToken(user, 200, res);
 });
+
+exports.getMe = (req, res) => {
+    res.status(200).json({
+        success: true,
+        data: {
+            user: req.user
+        }
+    });
+};
+
+exports.updateMe = catchAsync(async (req, res, next) => {
+    const allowedFields = ['nom', 'email'];
+    const updates = {}
+
+    Object.keys(req.body).forEach(el => {
+        if (allowedFields.includes(el)) updates[el] = req.body[el];
+    });
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        updates,
+        {
+            new: true,
+            runValidators: true
+        }
+    );
+
+    res.stauts(200).json({
+        success: true,
+        data: { user }
+    });
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id).select('+password');
+
+  if (!(await user.comparePassword(req.body.currentPassword))) {
+    return next(new AppError('Mot de passe actuel incorrect', 401));
+  }
+
+  user.password = req.body.newPassword;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Mot de passe mis à jour'
+  });
+});
