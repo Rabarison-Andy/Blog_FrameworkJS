@@ -11,11 +11,11 @@ import { catchAsync } from "../middleware/errorHandler"
  * @access  Public
  */
 const createArticle = catchAsync(async (req, res, next) => {
-  const { titre, contenu, categorie } = req.body;
+  const { title, content, categorie } = req.body;
 
   const article = new Article({
-	titre,
-	contenu,
+	title,
+	content,
 	auteur: req.user._id,
 	categorie,
   });
@@ -34,7 +34,7 @@ const createArticle = catchAsync(async (req, res, next) => {
 const getAllArticles = catchAsync(async (req, res, next) => {
   const totalCount = await Article.countDocuments();
 
-  const features = new QueryFeatures(Article.find(), req.query)
+  const features = new QueryFeatures(Article.find({ isPublished: true }), req.query)
 	.filter()
 	.search()
 	.sort()
@@ -67,7 +67,7 @@ const getArticleById = catchAsync(async (req, res, next) => {
       return next(new AppError('Article non trouvé', 404));
     }
 
-    await article.incrementerVues();
+    await article.incrementerViews();
 
     res.status(200).json({ success: true, data: article });
 });
