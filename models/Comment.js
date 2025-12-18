@@ -10,7 +10,8 @@ const commentSchema = new mongoose.Schema(
         },
 
     auteurcommentaire: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
             required: [true, 'Auteur obligatoire'],
             trim: true,
             maxlength: [100, 'Maximum 100 caractères']
@@ -58,5 +59,4 @@ commentSchema.pre(/^find/, function(next) {
     next();
 });
 
-const Comment = mongoose.model('Comment', commentSchema);
-module.exports = Comment;
+export const Comment = mongoose.model('Comment', commentSchema);

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
     nom: {
@@ -35,7 +36,13 @@ userSchema.pre('save', async function(next) {
     next();
 });
 
+userSchema.methods.isAdmin = function () {
+    return this.role === 'admin';
+};
+
 // Méthode pour comparer les mots de passe
 userSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
+
+export const User = mongoose.model('User', userSchema);

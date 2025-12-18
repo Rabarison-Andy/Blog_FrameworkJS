@@ -6,7 +6,7 @@ const signToken = (id) => {
     );
 };
 
-exports.register = catchAsync(async (req, res, next) => {
+export const register = catchAsync(async (req, res, next) => {
     const newUser = await User.create({
         nom: req.body.nom,
         email: req.body.email,
@@ -22,7 +22,7 @@ exports.register = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.login = catchAsync(async (req, res, next) => {
+export const login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {

@@ -11,3 +11,6 @@ package-lock.json
 # Fichiers système
 .DS_Store
 Thumbs.db
+
+# Fichiers de test
+test.http
