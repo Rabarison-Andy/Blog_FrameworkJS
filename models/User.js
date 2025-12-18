@@ -45,4 +45,10 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
+userSchema.methods.changePassword = async function(newPassword) {
+  this.password = newPassword;
+  await this.save();
+};
+
+
 export const User = mongoose.model('User', userSchema);
