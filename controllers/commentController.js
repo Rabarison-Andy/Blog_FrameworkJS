@@ -3,11 +3,6 @@ const Article = require('../models/Article');
 const AppError = require('../utils/AppError');
 const { catchAsync } = require('../middleware/errorHandler');
 
-// Sécurité pour n'avoir les commentaires seulement que sur des articles publiés
-if (!Article.isPublished) {
-  return next(new AppError('Commentaires désactivés sur cet article', 403));
-}
-
 // Create
 exports.createComment = catchAsync(async (req, res, next) => {
     const { articleId } = req.params;
@@ -15,6 +10,13 @@ exports.createComment = catchAsync(async (req, res, next) => {
     const article = await Article.findById(articleId);
     if (!article) {
         return next(new AppError('Article non trouvé', 404));
+    }
+
+    // Sécurité pour n'avoir les commentaires seulement que sur des articles publiés
+    if (!Article.isPublished) {
+        return next(
+            new AppError('Commentaires désactivés sur cet article', 403)
+        );
     }
 
     const comment = await Comment.create({
@@ -84,27 +86,30 @@ exports.getApprovedCommentsByArticle = catchAsync(async (req, res, next) => {
 
 //Update
 exports.updateComment = catchAsync(async (req, res, next) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const comment = await Comment.findByIdAndUpdate(
-        id,
-        req.body,
-        {
-            new: true,
-            runValidators: true
-        }
-    );
+  const comment = await Comment.findById(id);
+  if (!comment) {
+    return next(new AppError('Commentaire non trouvé', 404));
+  }
 
-    if (!comment) {
-        return next(new AppError('Commentaire non trouvé', 404));
-    }
+  // 🔐 Protection auteur
+  if (comment.auteurcommentaire.toString() !== req.user._id.toString()) {
+    return next(new AppError('Action non autorisée', 403));
+  }
 
-    res.status(200).json({
-        success: true,
-        message: 'Commentaire mis à jour avec succès',
-        data: comment
-    });
+  comment.commentairecontenu =
+    req.body.commentairecontenu || comment.commentairecontenu;
+
+  await comment.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Commentaire mis à jour avec succès',
+    data: comment
+  });
 });
+
 
 exports.approveComment = catchAsync(async (req, res, next) => {
     const { id } = req.params;
@@ -127,17 +132,23 @@ exports.approveComment = catchAsync(async (req, res, next) => {
 
 //Delete
 exports.deleteComment = catchAsync(async (req, res, next) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const comment = await Comment.findByIdAndDelete(id);
+  const comment = await Comment.findById(id);
+  if (!comment) {
+    return next(new AppError('Commentaire non trouvé', 404));
+  }
 
-    if (!comment) {
-        return next(new AppError('Commentaire non trouvé', 404));
-    }
+  // 🔐 Protection auteur
+  if (comment.auteurcommentaire.toString() !== req.user._id.toString()) {
+    return next(new AppError('Action non autorisée', 403));
+  }
 
-    res.status(200).json({
-        success: true,
-        message: 'Commentaire supprimé avec succès',
-        data: comment
-    });
+  await comment.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: 'Commentaire supprimé avec succès'
+  });
 });
+

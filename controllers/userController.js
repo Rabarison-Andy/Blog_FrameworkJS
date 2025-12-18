@@ -81,6 +81,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         }
     );
 
+    user.password = undefined;
+    
     res.stauts(200).json({
         success: true,
         data: { user }

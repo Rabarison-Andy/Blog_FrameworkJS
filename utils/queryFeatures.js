@@ -163,4 +163,4 @@ class QueryFeatures {
     }
 }
 
-module.exports = QueryFeatures;
+export default QueryFeatures;

@@ -7,7 +7,8 @@ const {
     getAllArticles,
     getArticleById,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    publishArticle
 } = require('../controllers/articleController');
 
 

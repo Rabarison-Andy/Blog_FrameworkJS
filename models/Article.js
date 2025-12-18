@@ -19,6 +19,11 @@ const articleSchema = new mongoose.Schema(
       ref: 'User',
       required: [true, 'Author is required']
     },
+    categorie: {
+      type: String,
+      enum: ['Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat5'],
+      required: true
+    },
     isPublished: { type: Boolean, default: false },
     tags: {
       type: String,

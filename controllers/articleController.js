@@ -84,7 +84,7 @@ const updateArticle = catchAsync(async (req, res, next) => {
   }
 
   // Protection Auteur
-  if (!existing.auteur || existing.auteur.toString() !== req.user._id.toString()) {
+  if (!existing.author || existing.author.toString() !== req.user._id.toString()) {
     return next(new AppError('Action non autorisée', 403));
   }
 
@@ -119,7 +119,7 @@ const deleteArticle = catchAsync(async (req, res, next) => {
   }
 
   // Protection Auteur
-  if (!existing.auteur || existing.auteur.toString() !== req.user._id.toString()) {
+  if (!existing.author || existing.author.toString() !== req.user._id.toString()) {
     return next(new AppError('Action non autorisée', 403));
   }
 
@@ -136,10 +136,39 @@ const deleteArticle = catchAsync(async (req, res, next) => {
   });
 });
 
+const publishArticle = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const article = await Article.findById(id);
+  if (!article) {
+    return next(new AppError('Article non trouvé', 404));
+  }
+
+  // Protection Auteur
+  if (article.auteur.toString() !== req.user._id.toString()) {
+    return next(new AppError('Action non autorisée', 403));
+  }
+
+  // Toggle publication
+  article.isPublished = !article.isPublished;
+  await article.save();
+
+  res.status(200).json({
+    success: true,
+    message: article.isPublished
+      ? 'Article publié avec succès'
+      : 'Article repassé en brouillon',
+    data: article
+  });
+});
+
+
+
 module.exports = {
     createArticle,
     getAllArticles,
     getArticleById,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    publishArticle
 };
