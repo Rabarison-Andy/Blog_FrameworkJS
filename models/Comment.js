@@ -6,7 +6,7 @@ const commentSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Le contenu est obligatoire'],
             trim: true,
-            maxlength: [1000, 'Maximum 500 caractères']
+            maxlength: [1000, 'Maximum 1000 caractères']
         },
 
     auteurcommentaire: {
@@ -54,7 +54,7 @@ commentSchema.statics.findApprouvesByArticle = function(articleId) {
 commentSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'article',
-        select: 'titre auteur'
+        select: 'title author'
     });
     next();
 });

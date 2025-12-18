@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Comment } from "./Comment";
 
 const articleSchema = new mongoose.Schema(
   {
@@ -44,12 +45,12 @@ const articleSchema = new mongoose.Schema(
 
 //Méthodes d'instance
 articleSchema.methods.publier = function() {
-    this.publish = true;
+    this.isPublished = true;
     return this.save();
 }
 
 articleSchema.methods.unplublish = function() {
-    this.publish = false;
+    this.isPublished = false;
     return this.save();
 }
 
@@ -60,19 +61,19 @@ articleSchema.methods.incrementViews = function() {
 
 //Méthodes statiques
 articleSchema.statics.findPublies = function() {
-    return this.find({publie: true}).sort({ createdAt : -1 });
+    return this.find({ isPublished: true}).sort({ createdAt : -1 });
 }
 
 articleSchema.statics.findByCategorie = function(categorie) {
-    return this.find({ categorie, publie: true }).sort({ createdAt: -1 });
+    return this.find({ categorie, isPublished: true }).sort({ createdAt: -1 });
 };
 
 //Champs virtuels
 articleSchema.virtual('resume').get(function() {
-    if (this.contenu.length <= 150) {
-        return this.contenu;
+    if (this.content.length <= 150) {
+        return this.content;
     }
-    return this.contenu.substring(0, 150) + '...'
+    return this.content.substring(0, 150) + '...'
 })
 
 /*
