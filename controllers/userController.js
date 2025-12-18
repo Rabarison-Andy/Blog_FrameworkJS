@@ -1,5 +1,9 @@
-const AppError = require('../utils/AppError');
-const { catchAsync } = require('../middleware/errorHandler');
+import { User } from "../models/User";
+import AppError from "../utils/AppError";
+import { QueryFeatures } from "../utils/queryFeatures";
+import { catchAsync } from "../middleware/errorHandler"
+
+const jwt = require('jsonwebtoken');
 
 const signToken = (id) => {
     return jwt.sign(
@@ -9,20 +13,30 @@ const signToken = (id) => {
     );
 };
 
-exports.register = catchAsync(async (req, res, next) => {
-    const newUser = await User.create({
-        nom: req.body.nom,
-        email: req.body.email,
-        password: req.body.password
-    });
+const createSendToken = (user, statusCode, res) => {
+    const token = signToken(user._id);
 
-    const token = signToken(newUser._id);
+    user.password = undefined; // 🔐 sécurité
 
-    res.status(201).json({
+    res.status(statusCode).json({
         success: true,
         token,
-        data: { user: newUser }
+        data: {
+            user
+        }
     });
+};
+
+exports.register = catchAsync(async (req, res, next) => {
+  const { nom, email, password } = req.body;
+
+  if (!nom || !email || !password) {
+    return next(new AppError('nom, email et password sont requis', 400));
+  }
+
+  const newUser = await User.create({ nom, email, password });
+
+  createSendToken(newUser, 201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -38,11 +52,5 @@ exports.login = catchAsync(async (req, res, next) => {
         return next(new AppError('Email ou mot de passe incorrect', 401));
     }
 
-    const token = signToken(user._id);
-
-    res.status(200).json({
-        success: true,
-        token,
-        data: { user }
-    });
+    createSendToken(user, 200, res);
 });

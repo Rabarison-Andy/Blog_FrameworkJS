@@ -13,8 +13,8 @@ exports.createComment = catchAsync(async (req, res, next) => {
     }
 
     const comment = await Comment.create({
-        contenu: req.body.contenu,
-        auteur: req.body.auteur,
+        commentairecontenu: req.body.commentairecontenu || req.body.contenu,
+        auteurcommentaire: req.body.auteurcommentaire || req.body.auteur,
         article: articleId
     });
 

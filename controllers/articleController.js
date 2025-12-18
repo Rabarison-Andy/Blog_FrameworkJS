@@ -43,7 +43,9 @@ const getAllArticles = catchAsync(async (req, res, next) => {
 
   const articles = await features.query;
 
-  const paginationInfo = features.getPaginationInfo(totalCount);
+  const paginationInfo = features.getPaginationInfo === 'function'
+  ? features.getPaginationInfo(totalCount)
+  : null;;
 
   const response = {
 	success: true,
@@ -53,7 +55,7 @@ const getAllArticles = catchAsync(async (req, res, next) => {
   };
 
   if (paginationInfo) {
-	response.pagination = paginationInfo;
+	  response.pagination = paginationInfo;
   }
 
   res.status(200).json(response);
