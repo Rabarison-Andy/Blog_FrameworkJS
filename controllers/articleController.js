@@ -11,12 +11,12 @@ import { catchAsync } from "../middleware/errorHandler"
  * @access  Public
  */
 const createArticle = catchAsync(async (req, res, next) => {
-  const { titre, contenu, auteur, categorie } = req.body;
+  const { titre, contenu, categorie } = req.body;
 
   const article = new Article({
 	titre,
 	contenu,
-	auteur,
+	auteur: req.user._id,
 	categorie,
   });
 
@@ -77,23 +77,34 @@ const getArticleById = catchAsync(async (req, res, next) => {
 const updateArticle = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
+  // Récupérer l'article d'abord pour vérifier l'auteur
+  const existing = await Article.findById(id);
+  if (!existing) {
+    return next(new AppError('Article non trouvé', 404));
+  }
+
+  // Protection Auteur
+  if (!existing.auteur || existing.auteur.toString() !== req.user._id.toString()) {
+    return next(new AppError('Action non autorisée', 403));
+  }
+
   const article = await Article.findByIdAndUpdate(
-	id,
-	req.body,
-	{
-	  new: true,
-	  runValidators: true
-	}
+    id,
+    req.body,
+    {
+      new: true,
+      runValidators: true
+    }
   );
 
   if (!article) {
-	return next(new AppError('Article non trouvé', 404));
+    return next(new AppError('Article non trouvé', 404));
   }
 
   res.status(200).json({
-	success: true,
-	message: 'Article mis à jour avec succès',
-	data: article
+    success: true,
+    message: 'Article mis à jour avec succès',
+    data: article
   });
 });
 
@@ -101,16 +112,27 @@ const updateArticle = catchAsync(async (req, res, next) => {
 const deleteArticle = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
+  // Récupérer l'article pour vérifier l'auteur avant suppression
+  const existing = await Article.findById(id);
+  if (!existing) {
+    return next(new AppError('Article non trouvé', 404));
+  }
+
+  // Protection Auteur
+  if (!existing.auteur || existing.auteur.toString() !== req.user._id.toString()) {
+    return next(new AppError('Action non autorisée', 403));
+  }
+
   const article = await Article.findByIdAndDelete(id);
 
   if (!article) {
-	return next(new AppError('Article non trouvé', 404));
+    return next(new AppError('Article non trouvé', 404));
   }
 
   res.status(200).json({
-	success: true,
-	message: 'Article supprimé avec succès',
-	data: article
+    success: true,
+    message: 'Article supprimé avec succès',
+    data: article
   });
 });
 

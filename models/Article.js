@@ -83,6 +83,13 @@ articleSchema.pre('save', function(next) {
     next()
 })
 
+articleSchema.pre('findOneAndDelete', async function(next) {
+  const article = await this.model.findOne(this.getFilter());
+  await Comment.deleteMany({ article: article._id });
+  next();
+});
+
+
 //Middleware après opération
 articleSchema.post('save', function(doc) {
     console.log(`Article sauvegardé: ${doc._id}`)

@@ -3,6 +3,11 @@ const Article = require('../models/Article');
 const AppError = require('../utils/AppError');
 const { catchAsync } = require('../middleware/errorHandler');
 
+// Sécurité pour n'avoir les commentaires seulement que sur des articles publiés
+if (!Article.isPublished) {
+  return next(new AppError('Commentaires désactivés sur cet article', 403));
+}
+
 // Create
 exports.createComment = catchAsync(async (req, res, next) => {
     const { articleId } = req.params;
@@ -14,7 +19,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
 
     const comment = await Comment.create({
         commentairecontenu: req.body.commentairecontenu || req.body.contenu,
-        auteurcommentaire: req.body.auteurcommentaire || req.body.auteur,
+        auteurcommentaire: req.body.auteurcommentaire || req.body._id,
         article: articleId
     });
 
