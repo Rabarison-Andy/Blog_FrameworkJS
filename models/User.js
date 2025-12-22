@@ -50,5 +50,12 @@ userSchema.methods.changePassword = async function(newPassword) {
   await this.save();
 };
 
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    return JWTTimestamp < this.passwordChangedAt.getTime() / 1000;
+  }
+  return false;
+};
+
 
 export const User = mongoose.model('User', userSchema);

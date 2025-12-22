@@ -5,56 +5,6 @@ import { catchAsync } from "../middleware/errorHandler"
 
 const jwt = require('jsonwebtoken');
 
-const signToken = (id) => {
-    return jwt.sign(
-        { id },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
-};
-
-const createSendToken = (user, statusCode, res) => {
-    const token = signToken(user._id);
-
-    user.password = undefined; // 🔐 sécurité
-
-    res.status(statusCode).json({
-        success: true,
-        token,
-        data: {
-            user
-        }
-    });
-};
-
-exports.register = catchAsync(async (req, res, next) => {
-  const { nom, email, password } = req.body;
-
-  if (!nom || !email || !password) {
-    return next(new AppError('nom, email et password sont requis', 400));
-  }
-
-  const newUser = await User.create({ nom, email, password });
-
-  createSendToken(newUser, 201, res);
-});
-
-exports.login = catchAsync(async (req, res, next) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return next(new AppError('Email et mot de passe requis', 400));
-    }
-
-    const user = await User.findOne({ email }).select('+password');
-
-    if (!user || !(await user.comparePassword(password))) {
-        return next(new AppError('Email ou mot de passe incorrect', 401));
-    }
-
-    createSendToken(user, 200, res);
-});
-
 exports.getMe = (req, res) => {
     res.status(200).json({
         success: true,
@@ -83,7 +33,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
     user.password = undefined;
     
-    res.stauts(200).json({
+    res.status(200).json({
         success: true,
         data: { user }
     });
@@ -92,8 +42,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 exports.updatePassword = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id).select('+password');
 
-  if (!(await user.comparePassword(req.body.currentPassword))) {
-    return next(new AppError('Mot de passe actuel incorrect', 401));
+  if (!req.body.newPassword || req.body.newPassword.length < 6) {
+    return next(new AppError('Nouveau mot de passe invalide', 400));
   }
 
   user.password = req.body.newPassword;

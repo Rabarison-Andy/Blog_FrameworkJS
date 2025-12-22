@@ -13,7 +13,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
     }
 
     // Sécurité pour n'avoir les commentaires seulement que sur des articles publiés
-    if (!Article.isPublished) {
+    if (!article.isPublished) {
         return next(
             new AppError('Commentaires désactivés sur cet article', 403)
         );
@@ -21,7 +21,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
 
     const comment = await Comment.create({
         commentairecontenu: req.body.commentairecontenu || req.body.contenu,
-        auteurcommentaire: req.body.auteurcommentaire || req.body._id,
+        auteurcommentaire: req.body._id,
         article: articleId
     });
 
