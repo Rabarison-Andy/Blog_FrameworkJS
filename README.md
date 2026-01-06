@@ -54,7 +54,7 @@ cd backend
 
 ##Création du fichier .env pour le backend
 ```
-mkdir .env
+touch .env
 ```
 ```
 PORT=3000
@@ -74,7 +74,7 @@ cd frontend
 
 ##Création du fichier .env pour le frontend
 ```
-mkdir .env
+touch .env
 ```
 ```
 VITE_API_URL=http://localhost:3000/api
