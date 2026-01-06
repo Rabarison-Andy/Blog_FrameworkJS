@@ -1,0 +1,141 @@
+# AnimaBlog - Plateforme de Blog sur l'Animation
+Blog développer dans le cadre des cours ECV FRAMEWORK JS, le but était de maîtriser la Stack MERN, réussir à concevoir une API REST sécurisé, réaliser une interface utilisateur, gérer l’authentification et les autorisation.
+
+## Stack Technique
+
+**Frontend :**
+* React (Vite)
+* CSS3 (Design Responsive & Accessibilité)
+* Axios (Requêtes HTTP)
+* React Router DOM (Navigation)
+
+**Backend :**
+* Node.js & Express.js
+* MongoDB (Base de données NoSQL) & Mongoose (ODM)
+* JWT (Authentification JSON Web Token)
+* Multer (Gestion des uploads d'images)
+
+**Outils & DevOps :**
+* Docker & Docker Compose (Conteneurisation de la BDD)
+* Git (Versionning)
+
+---
+# Démarrer le projet
+
+##Prérequis
+* [Node.js]
+* [Docker Desktop]
+* [npm ou yarn]
+* [MongoDB]
+* [Git]
+
+##Installation
+```bash
+# Cloner le repository
+git clone [URL_DU_REPO]
+cd NOM_DU_REPO
+cd backend
+
+# Installation des dépendances du backend
+npm install
+
+# Se déplacer dans le dossier frontend
+cd ../frontend
+
+# Installation des dépendances du frontend
+npm install
+```
+---
+
+##Configuration du .env pour le backend
+```
+cd backend
+```
+
+##Création du fichier .env pour le backend
+```
+mkdir .env
+```
+```
+PORT=3000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/blog_animation
+JWT_SECRET=votre_secret_super_securise_a_changer
+JWT_EXPIRES_IN=90d
+CORS_ORIGIN=http://localhost:5173
+```
+
+---
+
+##Configuration du .env pour le frontend
+```
+cd frontend
+```
+
+##Création du fichier .env pour le frontend
+```
+mkdir .env
+```
+```
+VITE_API_URL=http://localhost:3000/api
+```
+
+---
+#Lancement de la BDD et du backend
+
+##Lancement de la BDD
+Ouvrir Docker Desktop en amont
+
+##Dans le projet
+```
+cd backend
+docker-compose up -d
+```
+
+##Lancement du backend
+```
+npm start
+```
+
+Le serveur devrait démarrer sur http://localhost:3000
+
+---
+#Lancement du frontend
+
+##Dans le projet
+```
+cd frontend
+npm run dev
+```
+
+Le serveur devrait démarrer sur http://localhost:5173
+
+---
+```
+Projet/
+├── backend/                # API Node.js & Express
+│   ├── src/
+│   │   ├── config/         # Config DB
+│   │   ├── controllers/    # Logique métier
+│   │   ├── middleware/     # Auth & Upload
+│   │   ├── models/         # Schémas Mongoose (User, Article...)
+│   │   ├── routes/         # Définition des routes API
+│   │   └── server.js       # Point d'entrée
+│   ├── uploads/            # Stockage des images
+│   ├── docker-compose.yml  # Config Docker MongoDB
+│   └── .env                # Variables d'environnement (non versionné)
+│
+├── frontend/               # Application React (Vite)
+│   ├── src/
+│   │   ├── components/     # Composants réutilisables
+│   │   ├── context/        # Gestion état global (Auth)
+│   │   ├── pages/          # Vues principales (Home, Login, Article...)
+│   │   ├── services/       # Appels API (Axios)
+│   │   └── index.css       # Styles globaux
+│   ├── vite.config.js      # Config Vite
+│   └── .env                # Variables d'environnement (non versionné)
+│
+└── README.md               # Documentation
+```
+
+Projet réaliser par Rabarison Andy
