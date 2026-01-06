@@ -1,0 +1,62 @@
+/* Import de Erica One (Titres) et Inter (Corps de texte) */
+@import url('https://fonts.googleapis.com/css2?family=Erica+One&family=Inter:wght@400;600;800&display=swap');
+
+:root {
+  /* --- COULEURS (Violet / Noir / Blanc) --- */
+  --c-violet: #6c5ce7;
+  --c-black: #000000;
+  --c-white: #ffffff;
+  --c-gray: #f1f2f6; /* Pour casser légèrement le blanc sur les fonds */
+
+  /* --- UI ELEMENTS --- */
+  --border-thick: 4px solid var(--c-black); /* Contour épais style BD/Anim */
+  --shadow-hard: 8px 8px 0px var(--c-black); /* Ombre dure pour le relief */
+  --shadow-hover: 12px 12px 0px var(--c-violet); /* Ombre violette au survol */
+  
+  --radius: 0px; /* Pas d'arrondis, on veut du brut */
+}
+
+/* Reset Box-Sizing pour éviter les débordements */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--c-white);
+  color: var(--c-black);
+  line-height: 1.5;
+  font-size: 18px; /* Texte gros pour l'accessibilité */
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- TYPOGRAPHIE --- */
+h1, h2, h3, h4 {
+  font-family: 'Erica One', cursive;
+  text-transform: uppercase;
+  color: var(--c-black);
+  margin-top: 0;
+  line-height: 1.1;
+}
+
+h1 { font-size: clamp(2.5rem, 5vw, 4rem); } /* Réactif */
+h2 { font-size: 2.5rem; }
+h3 { font-size: 1.8rem; }
+
+/* Liens */
+a {
+  color: var(--c-black);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+/* Accessibilité Focus */
+:focus-visible {
+  outline: 4px solid var(--c-violet);
+  outline-offset: 2px;
+}

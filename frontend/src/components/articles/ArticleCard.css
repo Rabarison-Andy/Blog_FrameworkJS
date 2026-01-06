@@ -1,0 +1,115 @@
+/* Le conteneur principal prend TOUTE la largeur */
+.home-page {
+  width: 100%;
+  max-width: 1600px; /* Très large */
+  margin: 0 auto;
+  padding: 40px;
+}
+
+/* Recherche Style "Barre d'outils" */
+.search-container {
+  display: flex;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  margin-bottom: 60px;
+  background: var(--c-white);
+}
+
+.search-container input {
+  flex: 1;
+  border: none;
+  padding: 20px;
+  font-size: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  outline: none;
+}
+
+.search-container button {
+  background: var(--c-black);
+  color: var(--c-white);
+  font-family: 'Erica One';
+  font-size: 1.5rem;
+  padding: 0 40px;
+  border: none;
+  border-left: var(--border-thick);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-container button:hover {
+  background: var(--c-violet);
+}
+
+/* GRILLE ASYMÉTRIQUE */
+.articles-grid {
+  display: grid;
+  /* Cartes larges (min 400px) qui remplissent l'espace */
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
+  align-items: start; /* Évite que toutes les cartes aient la même hauteur forcée */
+}
+
+.article-card {
+  border: var(--border-thick);
+  background: var(--c-white);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+  position: relative;
+  /* Pas d'ombre par défaut pour un look "flat" au repos */
+}
+
+.article-card:hover {
+  transform: translate(-5px, -5px);
+  box-shadow: var(--shadow-hover); /* L'ombre apparaît au survol = sensation de mouvement */
+  z-index: 10;
+}
+
+.article-thumb {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-bottom: var(--border-thick);
+  /* Filtre noir et blanc qui passe en couleur au survol */
+  filter: grayscale(100%);
+  transition: filter 0.3s;
+}
+
+.article-card:hover .article-thumb {
+  filter: grayscale(0%);
+}
+
+.article-card h3 {
+  background: var(--c-black);
+  color: var(--c-white);
+  padding: 15px;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.card-footer {
+  padding: 20px;
+  border-top: var(--border-thick);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--c-gray);
+}
+
+/* Badge Catégorie */
+.cat-tag {
+  background: var(--c-violet);
+  color: var(--c-white);
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border: 2px solid var(--c-black);
+  font-size: 0.9rem;
+}
+
+.read-more {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  font-size: 1.1rem;
+}

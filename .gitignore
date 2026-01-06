@@ -1,16 +1,15 @@
-# Dépendances Node.js
+# Dépendances (Backend & Frontend)
 node_modules/
-package-lock.json
+**/node_modules/
 
-# Variables d'environnement
+# Environnement (Secrets)
 .env
+**/.env
 
-# Logs
+# Builds et logs
+.DS_Store
+logs/
 *.log
 
-# Fichiers système
-.DS_Store
-Thumbs.db
-
-# Fichiers de test
-test.http
+# Dossier uploads (optionnel, si tu ne veux pas stocker les images test)
+backend/uploads/

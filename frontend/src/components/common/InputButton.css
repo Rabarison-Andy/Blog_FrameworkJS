@@ -1,0 +1,67 @@
+/* Conteneur Centré mais large */
+.auth-form, .create-page, .article-detail {
+  width: 90%;
+  max-width: 900px;
+  margin: 50px auto;
+  border: var(--border-thick);
+  padding: 60px;
+  background: var(--c-white);
+  box-shadow: var(--shadow-hard);
+  position: relative;
+}
+
+/* Élément visuel "Titre" */
+.auth-form h2, .create-page h2 {
+  background: var(--c-white);
+  padding: 10px 20px;
+  font-size: 3rem;
+  border: var(--border-thick);
+  /* On le décale pour casser la grille */
+  display: inline-block;
+  transform: rotate(-1deg) translateY(-20px);
+  box-shadow: 5px 5px 0 var(--c-violet);
+}
+
+/* Inputs Accessibles */
+label {
+  display: block;
+  font-weight: 800;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 30px;
+  background: var(--c-gray);
+  border: var(--border-thick);
+  font-family: 'Inter';
+  font-size: 1.2rem;
+  color: var(--c-black);
+  border-radius: 0;
+}
+
+input:focus, textarea:focus, select:focus {
+  background: var(--c-white);
+  border-color: var(--c-violet);
+}
+
+/* Le Gros Bouton d'Action */
+button[type="submit"], .btn-action {
+  width: 100%;
+  background: var(--c-violet);
+  color: var(--c-white);
+  font-family: 'Erica One';
+  font-size: 2rem;
+  padding: 25px;
+  border: var(--border-thick);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+button[type="submit"]:hover {
+  background: var(--c-black);
+  transform: translate(4px, 4px); /* Effet d'enfoncement physique */
+  box-shadow: none; /* On enlève l'ombre s'il y en avait une */
+}

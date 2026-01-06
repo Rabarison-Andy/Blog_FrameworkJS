@@ -1,0 +1,16 @@
+# Dépendances Node.js
+node_modules/
+package-lock.json
+
+# Variables d'environnement
+.env
+
+# Logs
+*.log
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers de test
+test.http
