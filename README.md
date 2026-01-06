@@ -1,5 +1,5 @@
 # AnimaBlog - Plateforme de Blog sur l'Animation
-Blog développer dans le cadre des cours ECV FRAMEWORK JS, le but était de maîtriser la Stack MERN, réussir à concevoir une API REST sécurisé, réaliser une interface utilisateur, gérer l’authentification et les autorisation.
+Blog développer dans le cadre des cours FRAMEWORK JS, le but était de maîtriser la Stack MERN, réussir à concevoir une API REST sécurisé, réaliser une interface utilisateur, gérer l’authentification et les autorisation.
 
 ## Stack Technique
 
